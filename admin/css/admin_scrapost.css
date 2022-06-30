@@ -1,0 +1,8 @@
+input[type=checkbox], input[type=radio] {
+    margin-top: 4px;
+    margin-right: 0;
+}
+
+input[type=radio]:checked::before{
+    display: none;
+}

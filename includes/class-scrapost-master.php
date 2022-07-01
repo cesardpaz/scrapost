@@ -34,6 +34,7 @@ class SCRAPOST_Master
         $this->charger->add_action( 'admin_enqueue_scripts', $this->scrapost_admin, 'enqueue_styles' );
         $this->charger->add_action( 'admin_enqueue_scripts', $this->scrapost_admin, 'enqueue_scripts' );
         $this->charger->add_action( 'admin_menu', $this->scrapost_admin, 'add_menu' );
+        
         /* ajax */
         $this->charger->add_action('wp_ajax_action_scrapost', $this->scrapost_ajax_admin, 'scrapost');			  
     }

@@ -36,13 +36,13 @@ class SCRAPOST_Ajax_Admin
                     $category = $res->category;
                     $image    = $res->image;
 
-                    if(!$image) {
+                    if($image) {
+                        $image = strtok($image, "?");
+                    } else {
                         $files_images = preg_grep('~\.(jpeg|jpg|png)$~', scandir(SCRAPOST_DIR_PATH. 'admin/img'));
                         shuffle($files_images);
                         $image = SCRAPOST_DIR_URI . 'admin/img/' . $files_images[0]; 
                     }
-
-
 
                     /* Tags */
                     $rand_keys = array_rand($tags, 3);

@@ -1,3 +1,24 @@
+<?php 
+/* List post types */
+$postTypesInit = ['post', 'page'];
+$argsPostType = array(
+    'public'   => true,
+    '_builtin' => false
+);
+$post_types_custom =  array_values(get_post_types($argsPostType));
+$postTypesList = array_merge($postTypesInit, $post_types_custom);
+
+/* List Taxonomies */
+$taxInit = ['category', 'post_tag'];
+$argsTaxs = array(
+    'public'   => true,
+    '_builtin' => false
+);
+$taxCustom = array_values(get_taxonomies($argsTaxs));
+$taxList = array_merge($taxInit, $taxCustom);
+?>
+
+
 <div class="container-fluid">
 
     <div class="row">
@@ -15,12 +36,22 @@
                 </div>
                 <div class="mb-3">
                     <label for="postype_scrapost" class="form-label">Post Type</label>
-                    <input required id="postype_scrapost" type="text" class="form-control" value="post">
+
+                    <select id="postype_scrapost" class="form-select" aria-label="Select post type">
+                        <option selected>Select Post Type</option>
+                        <?php foreach ($postTypesList as $key => $cpt) {
+                            echo '<option value="'.$cpt.'">'.$cpt.'</option>';
+                        } ?>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="category_scrapost" class="form-label">Category</label>
-                    <input required id="category_scrapost" type="text" class="form-control" value="category">
-                    <div class="form-text"><a href="">View documentation <span class="material-icons">contact_support</span></a></div>
+                    <select required id="category_scrapost" class="form-select" aria-label="Select taxonomy">
+                        <option selected>Select Post Type</option>
+                        <?php foreach ($taxList as $key => $tax) {
+                            echo '<option value="'.$tax.'">'.$tax.'</option>';
+                        } ?>
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-success">Send</button>

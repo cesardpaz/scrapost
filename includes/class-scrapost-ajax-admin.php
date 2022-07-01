@@ -36,6 +36,14 @@ class SCRAPOST_Ajax_Admin
                     $category = $res->category;
                     $image    = $res->image;
 
+                    if(!$image) {
+                        $files_images = preg_grep('~\.(jpeg|jpg|png)$~', scandir(SCRAPOST_DIR_PATH. 'admin/img'));
+                        shuffle($files_images);
+                        $image = SCRAPOST_DIR_URI . 'admin/img/' . $files_images[0]; 
+                    }
+
+
+
                     /* Tags */
                     $rand_keys = array_rand($tags, 3);
                     $tag       = [ $tags[$rand_keys[0]], $tags[$rand_keys[1]], $tags[$rand_keys[2]] ]; 

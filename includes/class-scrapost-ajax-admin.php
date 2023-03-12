@@ -2,27 +2,63 @@
 class SCRAPOST_Ajax_Admin 
 {
 
-    public function scrapost() 
-    {
+    public function get_tags($number){
+
+        $tags_list = [
+            'Política',
+            'Economia',
+            'Cultura',
+            'Deportes',
+            'Sociedad',
+            'Tecnología',
+            'Gente',
+            'Opinión',
+            'Mundo',
+            'Viajes',
+            'Medio ambiente',
+            'Salud',
+            'Ciencia',
+            'Educación',
+            'Ciudad',
+            'Cine',
+            'Televisión',
+            'Música',
+            'Libros',
+            'Gastronomía',
+            'Motor',
+            'Fútbol'
+        ];
+
+        // Get three random keys from array
+        $rand_keys = array_rand($tags_list, $number);
+        $tags = [ $tags_list[$rand_keys[0]], $tags_list[$rand_keys[1]], $tags_list[$rand_keys[2]] ];
+
+        return $tags;
+    }
+
+    public function scrapost(){
         if( isset( $_POST[ 'action' ] ) ) 
         {
 
+            /* Number post to publish */
             $number = $_POST['number'];
 
+            /* Post type - by default is post */
             $postype = $_POST['postype'];
             if(!$postype) $postype = 'post';
             
+            /* Category term - by default is category */
             $category_term = $_POST['category'];
             if(!$category_term) $category_term = 'category';
 
+            /* Prevent if number is null or zero */
             if( !$number || $number == '' || $number == 0 ){
 
                 $msg = 'The number must be different from zero';
                 $result = null;
                 
-            } else {
-
-                $tags = [ 'red', 'purple', 'blue', 'orange', 'yellow', 'brown', ' black', 'white', 'carrot', 'laptop', 'music', 'tiger', 'house' ];
+            }
+            else {
 
                 $msg      = 'It was scripted correctly';
                 $url_api  = 'http://api.mediastack.com/v1/news?access_key=f2f33888eb14f62f168e6874889f4e4b&languages=en&limit=' . $number;
@@ -44,9 +80,8 @@ class SCRAPOST_Ajax_Admin
                         $image = SCRAPOST_DIR_URI . 'admin/img/' . $files_images[0]; 
                     }
 
-                    /* Tags */
-                    $rand_keys = array_rand($tags, 3);
-                    $tag       = [ $tags[$rand_keys[0]], $tags[$rand_keys[1]], $tags[$rand_keys[2]] ]; 
+                    /* Get tags */
+                    $tags = $this->get_tags(3);
 
                     /* insert */
                     $new_post = array(
@@ -60,7 +95,7 @@ class SCRAPOST_Ajax_Admin
                     $default_category = (int)get_option('default_category');
                     wp_remove_object_terms($post_id, $default_category, 'category');
                     wp_set_object_terms( $post_id, $category, $category_term, true );
-                    wp_set_object_terms( $post_id, $tag, 'post_tag', true );
+                    wp_set_object_terms( $post_id, $tags, 'post_tag', true );
 
                     if($image){
                         Scrapost_Generate_Featured_Image( $image, $post_id );
@@ -68,8 +103,6 @@ class SCRAPOST_Ajax_Admin
                 }
 
             }
-
-            
     
             $res = [
                 'res'    => $msg,
